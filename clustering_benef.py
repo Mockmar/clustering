@@ -71,10 +71,11 @@ beneficiaires = []
 
 for client, achats in data.items():
     for achat in achats:
-        clients.append(client)
-        produits.append(achat['produit'])
-        montants.append(achat['montant'])
-        beneficiaires.append(achat['beneficiaire'])
+        for beneficiaire in achat['beneficiaires']:
+            clients.append(client)
+            produits.append(achat['produit'])
+            montants.append(achat['montant'])
+            beneficiaires.append(beneficiaire)
 
 df = pd.DataFrame({
     'client': clients,
@@ -84,7 +85,10 @@ df = pd.DataFrame({
 })
 
 # Pivot de la DataFrame pour créer une matrice client-produit
-df_pivot = df.pivot_table(index='client', columns='produit', values='montant', fill_value=0)
+df_pivot = df.pivot_table(index='client', columns='produit', values='montant', aggfunc='sum', fill_value=0)
+
+# Suite du code reste inchangée
+
 
 # Standardisation des données
 scaler = StandardScaler()
